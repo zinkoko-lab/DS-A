@@ -6,4 +6,5 @@ int main() {
         sum += i*i;
     };
     printf("%d\n", sum);
+    return 0;
 }
