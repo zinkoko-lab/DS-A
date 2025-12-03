@@ -11,4 +11,5 @@ int sqSum(int num) {
 int main() {
     int result = sqSum(100);
     printf("%d\n", result);
+    return 0;
 }
