@@ -1,0 +1,9 @@
+4. 構造体
+以下の構造体(C)と同等のデータ型を定義し、 すべてのメンバーを出力せよ
+struct st {
+    int key;
+    char *str;
+}
+st;
+st.key=101;
+st.str="This is hell.";
