@@ -196,6 +196,7 @@ class LinkedList {
         }
     }
 }
+
 some_quote = new LinkedList();
 some_quote.addFirst("if");
 some_quote.addLast("there");
