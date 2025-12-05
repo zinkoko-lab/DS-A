@@ -182,7 +182,7 @@ class LinkedList {
             this.removeLast();
         }
 
-        // 1 < index < index + 1 の場合:
+        // 1 < index <= size の場合:
         else {
             let curNd = this.head;
             let curNdIdx = 1;

@@ -137,7 +137,7 @@ class LinkedList:
         elif index == size and index < 0:
             self.removeLast()
 
-        # 1 < index < index + 1 の場合:
+        # 1 < index <= size の場合:
         else:
             cur = self.head
             count = 1
