@@ -1,0 +1,38 @@
+from linked_list import LinkedList
+
+
+class Stack(LinkedList):
+
+    def push(self, val):
+        super().addLast(val)
+        return
+
+    def pop(self):
+        return super().removeLast()
+
+    def getVal(self):
+        super().printList()
+
+    def peek(self):
+        cur_node = self.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        return cur_node.val
+
+
+if __name__ == "__main__":
+
+    # PUSH 1 -> PUSH 5 -> POP -> PUSH 7 -> PUSH 6 -> PUSH 4 -> POP -> POP -> PUSH 3
+    # final result ---> 1->7->3
+    stack = Stack()
+    stack.push(1)  # PUSH 1
+    stack.push(5)  # PUSH 5
+    print(stack.pop())  # POP
+    stack.push(7)  # PUSH 7
+    stack.push(6)  # PUSH 6
+    stack.push(4)  # PUSH 4
+    print(stack.pop())
+    print(stack.pop())
+    stack.push(3)  # PUSH 3
+    stack.getVal()
+    print(stack.peek())

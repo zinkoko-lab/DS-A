@@ -68,6 +68,7 @@ class LinkedList:
         )  # 与えられた index が有効であるかどうか check する
 
         # 有効な範囲は (1 ~ size + 1) or (index < 0)となる
+
         # index 番号が 1 の場合は listの先頭に new nodeを加える
         if index == 1:
             self.addFirst(val)
@@ -89,13 +90,15 @@ class LinkedList:
 
     # listの先頭の node を削除するメソッド
     def removeFirst(self):
+        # listが空っぽのときはエラーを表示
         if not self.head:
             raise IndexError("This is an empty linked list and no element to remove.")
-            return
+            return None
 
         cur = self.head
         self.head = cur.next
         cur.next = None
+        return cur.val
 
     # listの最後の node を削除するメソッド
     def removeLast(self):
@@ -110,7 +113,9 @@ class LinkedList:
             while count < size - 1:
                 cur = cur.next
                 count += 1
+            target = cur.next
             cur.next = None
+            return target.val
 
     #  listの任意の index の node を削除するメソッド
     def remove(self, index):
