@@ -30,9 +30,13 @@ class LinkedList:
 
     #  listの任意の index の node を削除/追加するメソッドを実行する際に
     # 与えられた index が有効であるかどうか check するプラベートメソッド
-    def _validate_index(self, index, size):
-        # (listの長さ+1)より大きいindex番号を与ると、範囲外エラーとなる
-        if index > size + 1:
+    def _validate_index(self, index, size, method):
+        # (listの長さ+1)より大きいindex番号を与ると、範囲外エラーとなる(add実行時)
+        if index > size + 1 and method == self.add:
+            raise IndexError("index out of range")
+
+        # listの長さより大きいindex番号を与ると、範囲外エラーとなる(remove実行時)
+        if index > size and method == self.remove:
             raise IndexError("index out of range")
 
         # index-1 start 仕様だと考え、index番号を0と与えたときはエラーとなる
@@ -64,7 +68,7 @@ class LinkedList:
 
         size = self.count_node()
         self._validate_index(
-            index, size
+            index, size, self.add
         )  # 与えられた index が有効であるかどうか check する
 
         # 有効な範囲は (1 ~ size + 1) or (index < 0)となる
@@ -109,7 +113,9 @@ class LinkedList:
             while count < size - 1:
                 cur = cur.next
                 count += 1
+            target = cur.next
             cur.next = None
+            return target.val  # stack のpopを再現するために追加した
 
     #  listの任意の index の node を削除するメソッド
     def remove(self, index):
@@ -120,7 +126,7 @@ class LinkedList:
 
         size = self.count_node()
         self._validate_index(
-            index, size
+            index, size, self.remove
         )  # 与えられた index が有効であるかどうか check する
 
         # index の有効範囲は (1 ~ size + 1) or (index < 0)
@@ -129,7 +135,7 @@ class LinkedList:
         if index == 1:
             self.remove_first()
 
-        # index < 0 or index == size + 1 の場合は、最後の nodeを削除するメソッドを実行
+        # index < 0 or index == size の場合は、最後の nodeを削除するメソッドを実行
         elif index == size or index < 0:
             self.remove_last()
 
