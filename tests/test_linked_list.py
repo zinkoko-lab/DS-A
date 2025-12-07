@@ -110,7 +110,7 @@ def test_add_3():
         sample_list.add_last(val)
 
     with pytest.raises(IndexError) as e:
-        sample_list.add(0, "" "Z")
+        sample_list.add(0, "Z")
     assert str(e.value) == "invalid index number"
 
 
@@ -330,7 +330,7 @@ def test_remove_5(capsys):
 
 
 # index == size -> remove_last が実行される
-def test_remove_5(capsys):
+def test_remove_6(capsys):
     test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
     for val in test_vals:
@@ -344,7 +344,7 @@ def test_remove_5(capsys):
 
 
 # index < 0 -> remove_last が実行される
-def test_remove_6(capsys):
+def test_remove_7(capsys):
     test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
     for val in test_vals:
@@ -357,7 +357,7 @@ def test_remove_6(capsys):
 
 
 # 1 < index <= size の場合:
-def test_remove_7(capsys):
+def test_remove_8(capsys):
     test_vals = ["A", "B", "middle", "C", "D"]
     sample_list = linked_list.LinkedList()
     for val in test_vals:
@@ -371,7 +371,7 @@ def test_remove_7(capsys):
 
 # =============================================
 # LinkList count_node
-def test_count_node(capsys):
+def test_count_node():
     num_nodes = 100
     sample_list = linked_list.LinkedList()
     for val in range(num_nodes):

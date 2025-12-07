@@ -104,7 +104,7 @@ class LinkedList:
     def remove_last(self):
         # listが空っぽのときはエラ or listの中身は node 1個のみの場合は先頭を削除 => remove_first()へ
         if not self.head or self.count_node() == 1:
-            self.remove_first()
+            return self.remove_first()
 
         else:
             size = self.count_node()
@@ -120,16 +120,16 @@ class LinkedList:
     #  listの任意の index の node を削除するメソッド
     def remove(self, index):
 
-        # listが空っぽのときは remove_first を実行し、エラーを表示する
+        # listが空っぽのときは エラーを表示する
         if not self.head:
-            self.remove_first()
+            raise IndexError("This is an empty linked list and no element to remove.")
 
         size = self.count_node()
         self._validate_index(
             index, size, self.remove
         )  # 与えられた index が有効であるかどうか check する
 
-        # index の有効範囲は (1 ~ size + 1) or (index < 0)
+        # index の有効範囲は (1 ~ size) or (index < 0)
 
         # index == 1の場合は、 先頭の nodeを削除するメソッドを実行
         if index == 1:
