@@ -120,6 +120,10 @@ class LinkedList:
     #  listの任意の index の node を削除するメソッド
     def remove(self, index):
 
+        # listが空っぽのときは remove_first を実行し、エラーを表示する
+        if not self.head:
+            self.remove_first()
+
         size = self.count_node()
         self._validate_index(
             index, size
@@ -132,7 +136,7 @@ class LinkedList:
             self.remove_first()
 
         # index < 0 or index == size + 1 の場合は、最後の nodeを削除するメソッドを実行
-        elif index == size and index < 0:
+        elif index == size or index < 0:
             self.remove_last()
 
         # 1 < index <= size の場合:

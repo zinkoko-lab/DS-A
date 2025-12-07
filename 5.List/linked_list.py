@@ -114,7 +114,7 @@ class LinkedList:
     #  listの任意の index の node を削除するメソッド
     def remove(self, index):
 
-        # listが空っぽのときはエラ
+        # listが空っぽのときは remove_first を実行し、エラーを表示する
         if not self.head:
             self.remove_first()
 
