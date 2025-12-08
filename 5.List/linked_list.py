@@ -73,11 +73,11 @@ class LinkedList:
         # 有効な範囲は (1 ~ size + 1) or (index < 0)となる
         # index 番号が 1 の場合は listの先頭に new nodeを加える
         if index == 1:
-            self.add_first(val)
+            return self.add_first(val)
 
         # index 番号がマイナスまたは size + 1の場合は末尾に new nodeを加える
         elif index < 0 or index == size + 1:
-            self.add_last(val)
+            return self.add_last(val)
 
         # その他の場合(つまり 1 < index <= size)
         else:
@@ -89,6 +89,7 @@ class LinkedList:
                 cur_idx += 1
             new.next = cur.next
             cur.next = new
+            return
 
     # listの先頭の node を削除するメソッド
     def remove_first(self):
