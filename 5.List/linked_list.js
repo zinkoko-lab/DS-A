@@ -89,7 +89,7 @@ class LinkedList {
             this.addFirst(val);
         }
 
-        // index 番号がマイナスまたは size + 1の場合は末尾に new nodeを加える
+        // index 番号がマイナスまたは size + 1 の場合は末尾に new nodeを加える
         else if (index < 0 || index == size + 1) {
             this.addLast(val);
         }
@@ -118,7 +118,7 @@ class LinkedList {
         } else {
             let curNd = this.head;
             this.head = curNd.next;
-            curNd.next = null;
+            if (curNd.next) curNd.next = null;
         }
     }
 
@@ -170,15 +170,15 @@ class LinkedList {
             return;
         }
 
-        // index の有効範囲は (1 ~ size + 1) or (index < 0)
+        // index の有効範囲は (1 ~ size) or (index < 0)
 
         // index == 1の場合は、 先頭の nodeを削除するメソッドを実行
         if (index == 1) {
             this.removeFirst();
         }
 
-        // index < 0 or index == size + 1 の場合は、最後の nodeを削除するメソッドを実行
-        else if (index < 0 || index == size + 1) {
+        // index < 0 or index == size の場合は、最後の nodeを削除するメソッドを実行
+        else if (index < 0 || index == size) {
             this.removeLast();
         }
 

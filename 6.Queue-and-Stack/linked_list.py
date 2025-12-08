@@ -99,15 +99,20 @@ class LinkedList:
         cur = self.head
         self.head = cur.next
         cur.next = None
+        return cur.val
 
     # listの最後の node を削除するメソッド
     def remove_last(self):
+        size = self.count_node()
+
         # listが空っぽのときはエラ or listの中身は node 1個のみの場合は先頭を削除 => remove_first()へ
         if not self.head or self.count_node() == 1:
             return self.remove_first()
-
+        elif size == 1:
+            target = self.head
+            self.head = None
+            return target.val  # stack のpopを再現するために追加した
         else:
-            size = self.count_node()
             cur = self.head
             count = 1
             while count < size - 1:
@@ -133,11 +138,11 @@ class LinkedList:
 
         # index == 1の場合は、 先頭の nodeを削除するメソッドを実行
         if index == 1:
-            self.remove_first()
+            return self.remove_first()
 
         # index < 0 or index == size の場合は、最後の nodeを削除するメソッドを実行
         elif index == size or index < 0:
-            self.remove_last()
+            return self.remove_last()
 
         # 1 < index <= size の場合:
         else:
@@ -149,6 +154,7 @@ class LinkedList:
             target = cur.next
             cur.next = target.next
             target.next = None
+            return target.val
 
 
 if __name__ == "__main__":

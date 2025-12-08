@@ -46,9 +46,11 @@ def test_add_first_2(capsys):
     for val in test_vals:
         sample_list.add_first(val)
 
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C -> D\n"
+    for i in range(1000):
+        first_val = i + 1
+        sample_list.add_first(first_val)
+        first_node = sample_list.head
+        assert first_val == first_node.val
 
 
 # =============================================
@@ -64,15 +66,19 @@ def test_add_last_1():
 
 
 # 空っぽでないリストの末尾に新しいnodeを追加できること
-def test_add_last_2(capsys):
+def test_add_last_2():
     test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
     for val in test_vals:
         sample_list.add_last(val)
 
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C -> D\n"
+    for i in range(1000):
+        last_val = sample_list.count_node() + i + 1
+        sample_list.add_last(last_val)
+        cur_node = sample_list.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        assert last_val == cur_node.val
 
 
 # =============================================
@@ -137,25 +143,30 @@ def test_add_6():
     for val in test_vals:
         sample_list.add_last(val)
 
-    sample_list.add(1, "head")
-    assert sample_list.head.val == "head"
-    assert sample_list.head.next.val == "A"
+    for i in range(1000):
+        val = i + 1
+        sample_list.add(1, val)
+        first_node = sample_list.head
+        assert val == first_node.val
 
 
 # 空っぽでないlist
 # index==list-size+1
 # 末尾にnodeが入ること
-def test_add_7(capsys):
+def test_add_7():
     test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
     for val in test_vals:
         sample_list.add_last(val)
 
-    last_index = len(test_vals) + 1
-    sample_list.add(last_index, "tail")
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C -> D -> tail\n"
+    last_index = sample_list.count_node() + 1
+    for val in range(1000):
+        sample_list.add(last_index, val)
+        cur_node = sample_list.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        assert val == cur_node.val
+        last_index += 1
 
 
 # 空っぽでないlist
@@ -167,11 +178,14 @@ def test_add_8(capsys):
     for val in test_vals:
         sample_list.add_last(val)
 
-    minus_index = -3
-    sample_list.add(minus_index, "negative")
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C -> D -> negative\n"
+    for i in range(1000):
+        val = i + 1
+        idx = val * (-1)
+        sample_list.add(idx, val)
+        cur_node = sample_list.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        assert val == cur_node.val
 
 
 # 空っぽでないlist
@@ -266,7 +280,7 @@ def test_remove_last_3(capsys):
 # listが空っぽのときは、エラーを表示する
 def test_remove_1():
     sample_list = linked_list.LinkedList()
-    for i in range(100):
+    for i in range(1000):
         with pytest.raises(IndexError) as e:
             sample_list.remove(i + 1)
         assert str(e.value) == "This is an empty linked list and no element to remove."
@@ -284,7 +298,7 @@ def test_remove_2():
         sample_list.add_last(val)
 
     size = len(test_vals)
-    for i in range(100):
+    for i in range(1000):
         idx = size + 1 + i
         with pytest.raises(IndexError) as e:
             sample_list.remove(idx)
@@ -318,42 +332,44 @@ def test_remove_4(capsys):
 
 # index < 0 -> remove_last が実行される
 def test_remove_5(capsys):
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
+    for i in range(1000):
+        val = i + 1
         sample_list.add_last(val)
 
-    sample_list.remove(-3)
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C\n"
+    for i in range(1000):
+        val = 1000 - i
+        idx = (i + 1) * (-1)
+        assert val == sample_list.remove(idx)
 
 
 # index == size -> remove_last が実行される
-def test_remove_6(capsys):
-    test_vals = ["A", "B", "C", "D"]
+def test_remove_6():
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
+    for i in range(1000):
+        val = i + 1
         sample_list.add_last(val)
 
-    index = len(test_vals)
-    sample_list.remove(index)
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C\n"
+    size = sample_list.count_node()
+    while size:
+        val = size
+        assert val == sample_list.remove(size)
+        size -= 1
 
 
 # index < 0 -> remove_last が実行される
 def test_remove_7(capsys):
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
+    for i in range(1000):
+        val = i + 1
         sample_list.add_last(val)
 
-    sample_list.remove(-3)
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C\n"
+    size = sample_list.count_node()
+    while size:
+        val = size
+        idx = val * (-1)
+        assert val == sample_list.remove(idx)
+        size -= 1
 
 
 # 1 < index <= size の場合:
@@ -372,28 +388,28 @@ def test_remove_8(capsys):
 # =============================================
 # LinkList count_node
 def test_count_node():
-    num_nodes = 100
+    num_nodes = 1000
     sample_list = linked_list.LinkedList()
     for val in range(num_nodes):
         sample_list.add_last(val)
-
-    assert num_nodes == sample_list.count_node()
+        assert val + 1 == sample_list.count_node()
 
 
 # =============================================
 # LinkList print_list
 def test_print_list(capsys):
-    num_nodes = 100
-    result_str = ""
-    sample_list = linked_list.LinkedList()
-    for i in range(num_nodes):
-        val = i + 1
-        result_str += str(val) + " -> " if val < num_nodes else str(val) + "\n"
-        sample_list.add_last(val)
+    for n in range(1000):
+        result_str = ""
+        sample_list = linked_list.LinkedList()
+        num_nodes = n + 1
+        for i in range(num_nodes):
+            val = i + 1
+            result_str += str(val) + " -> " if val < num_nodes else str(val) + "\n"
+            sample_list.add_last(val)
 
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == result_str
+        sample_list.print_list()
+        captured = capsys.readouterr()
+        assert captured.out == result_str
 
 
 # =============================================
