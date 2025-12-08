@@ -53,8 +53,7 @@ class LinkedList:
     def add_last(self, val):
         # 空っぽの list であれば、先頭に new node を加える
         if not self.head:
-            self.add_first(val)
-            return
+            return self.add_first(val)
 
         # 空っぽでないときは、先頭から一個一個たどって最後の nodeに辿り着くまで行く
         new = Node(val)
