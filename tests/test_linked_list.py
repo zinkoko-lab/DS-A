@@ -171,7 +171,7 @@ def test_add_7():
 # 空っぽでないlist
 # index < 0
 # 末尾にnodeが入ること
-def test_add_8(capsys):
+def test_add_8():
     sample_list = linked_list.LinkedList()
     for _ in range(1000):
         sample_list.add_last(random.choice(CHARS))
@@ -220,7 +220,7 @@ def test_remove_first_1():
 
 
 # 空っぽでないときlistの先頭にnodeを削除可
-def test_remove_first_2(capsys):
+def test_remove_first_2():
     for _ in range(1000):
         sample_list = linked_list.LinkedList()
         for j in range(100):
@@ -266,7 +266,7 @@ def test_remove_last_2():
 
 
 # 空っぽでないときlistの末尾のnodeを削除可
-def test_remove_last_3(capsys):
+def test_remove_last_3():
     sample_list = linked_list.LinkedList()
     for _ in range(1000):
         val = random.choice(CHARS)
@@ -321,7 +321,7 @@ def test_remove_3():
 
 
 # index == 1 -> remove_first が実行される
-def test_remove_4(capsys):
+def test_remove_4():
     sample_list = linked_list.LinkedList()
     for _ in range(1000):
         sample_list.add_first(random.choice(CHARS))
@@ -371,7 +371,7 @@ def test_remove_6():
 
 
 # 1 < index < size の場合:
-def test_remove_7(capsys):
+def test_remove_7():
     sample_list = linked_list.LinkedList()
     for _ in range(1000):
         sample_list.add_last(random.choice(CHARS))
