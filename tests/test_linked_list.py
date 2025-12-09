@@ -9,12 +9,15 @@ CHARS = list(string.ascii_letters + string.digits)
 # =============================================
 # testing Node object
 def test_Node():
-    node2 = linked_list.Node("List!")
-    node1 = linked_list.Node("Hello", node2)
-    assert node2.val == "List!"
-    assert node2.next == None
-    assert node1.val == "Hello"
-    assert node1.next == node2
+    for _ in range(1000):
+        val2 = random.choice(CHARS)
+        node2 = linked_list.Node(val2)
+        val1 = random.choice(CHARS)
+        node1 = linked_list.Node(val1, node2)
+        assert node2.val == val2
+        assert node2.next == None
+        assert node1.val == val1
+        assert node1.next == node2
 
 
 # =============================================
