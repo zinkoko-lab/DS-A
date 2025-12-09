@@ -144,7 +144,7 @@ class LinkedList:
         elif index == size or index < 0:
             return self.remove_last()
 
-        # 1 < index <= size の場合:
+        # 1 < index < size の場合:
         else:
             cur = self.head
             count = 1

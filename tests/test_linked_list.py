@@ -1,5 +1,9 @@
 from src import linked_list
 import pytest
+import string
+import random
+
+CHARS = list(string.ascii_letters + string.digits)
 
 
 # =============================================
@@ -33,21 +37,18 @@ def test_init():
 # 空っぽのリストの先頭に新しいnodeを追加する
 def test_add_first_1():
     sample_list = linked_list.LinkedList()
-    sample_list.add_first("A")
-    assert sample_list.head.val == "A"
+    first_node_val = random.choice(CHARS)
+    sample_list.add_first(first_node_val)
+    assert sample_list.head.val == first_node_val
     assert sample_list.head.next == None
 
 
 # 空っぽでないリストの先頭に新しいnodeを追加する
 # A -> B -> C -> D
-def test_add_first_2(capsys):
-    test_vals = ["D", "C", "B", "A"]
+def test_add_first_2():
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_first(val)
-
-    for i in range(1000):
-        first_val = i + 1
+    for _ in range(1000):
+        first_val = random.choice(CHARS)
         sample_list.add_first(first_val)
         first_node = sample_list.head
         assert first_val == first_node.val
@@ -60,16 +61,18 @@ def test_add_first_2(capsys):
 # 空っぽのリストの末尾に新しいnodeを追加するとlistの先頭に追加となること
 # add_last method の内の add_firstの実行の確認
 def test_add_last_1():
-    sample_list = linked_list.LinkedList()
-    sample_list.add_last("A")
-    assert sample_list.head.val == "A"
+    for _ in range(1000):
+        sample_list = linked_list.LinkedList()
+        last_val = random.choice(CHARS)
+        sample_list.add_last(last_val)
+        assert last_val == sample_list.head.val
 
 
 # 空っぽでないリストの末尾に新しいnodeを追加できること
 def test_add_last_2():
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
+    for i in range(1000):
+        val = random.choice(CHARS)
         sample_list.add_last(val)
 
     for i in range(1000):
@@ -88,63 +91,62 @@ def test_add_last_2():
 
 # 空っぽのlistに範囲外のindex番号にnodeを追加不可
 def test_add_1():
-    empty_list = linked_list.LinkedList()
-    with pytest.raises(IndexError) as e:
-        empty_list.add(5, "A")
-    assert str(e.value) == "index out of range"
+    for i in range(1000):
+        empty_list = linked_list.LinkedList()
+        with pytest.raises(IndexError) as e:
+            empty_list.add(empty_list.count_node() + 2 + i, random.choice(CHARS))
+        assert str(e.value) == "index out of range"
 
 
 # 空っぽでないlistに範囲外のindex番号にnodeを追加不可
 def test_add_2():
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
+    for i in range(100):
+        val = random.choice(CHARS)
         sample_list.add_last(val)
 
-    for i in range(100):
-        index = len(test_vals) + 2 + i
+    for i in range(1000):
+        index = sample_list.count_node() + 2 + i
         with pytest.raises(IndexError) as e:
-            sample_list.add(index, "R")
+            sample_list.add(index, random.choice(CHARS))
         assert str(e.value) == "index out of range"
 
 
 # 空っぽでないlistのindex番号0にnodeを追加不可
 def test_add_3():
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
+    for _ in range(1000):
+        val = random.choice(CHARS)
         sample_list.add_last(val)
-
-    with pytest.raises(IndexError) as e:
-        sample_list.add(0, "Z")
-    assert str(e.value) == "invalid index number"
+        with pytest.raises(IndexError) as e:
+            sample_list.add(0, random.choice(CHARS))
+        assert str(e.value) == "invalid index number"
 
 
 # 空っぽのlistのindex番号0にnodeを追加不可
 def test_add_4():
     sample_list = linked_list.LinkedList()
     with pytest.raises(IndexError) as e:
-        sample_list.add(0, "Z")
+        sample_list.add(0, random.choice(CHARS))
     assert str(e.value) == "invalid index number"
 
 
 # 空っぽのlistのindex番号1にnodeを追加可
 def test_add_5():
-    sample_list = linked_list.LinkedList()
-    sample_list.add(1, "A")
-    assert sample_list.head.val == "A"
-    assert sample_list.head.next == None
+    for _ in range(1000):
+        sample_list = linked_list.LinkedList()
+        val = random.choice(CHARS)
+        sample_list.add(1, val)
+        assert sample_list.head.val == val
+        assert sample_list.head.next == None
 
 
 # 空っぽでないlistのindex番号1にnodeを追加可
 def test_add_6():
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    for i in range(1000):
-        val = i + 1
+    sample_list.add_first(random.choice(CHARS))
+    for _ in range(1000):
+        val = random.choice(CHARS)
         sample_list.add(1, val)
         first_node = sample_list.head
         assert val == first_node.val
@@ -154,33 +156,28 @@ def test_add_6():
 # index==list-size+1
 # 末尾にnodeが入ること
 def test_add_7():
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    last_index = sample_list.count_node() + 1
-    for val in range(1000):
-        sample_list.add(last_index, val)
+    sample_list.add_first(random.choice(CHARS))
+    for _ in range(1000):
+        size = sample_list.count_node()
+        val = random.choice(CHARS)
+        sample_list.add(size + 1, val)
         cur_node = sample_list.head
         while cur_node.next:
             cur_node = cur_node.next
         assert val == cur_node.val
-        last_index += 1
 
 
 # 空っぽでないlist
 # index < 0
 # 末尾にnodeが入ること
 def test_add_8(capsys):
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    for i in range(1000):
-        val = i + 1
-        idx = val * (-1)
+    for _ in range(1000):
+        sample_list.add_last(random.choice(CHARS))
+        size = sample_list.count_node()
+        idx = random.randint(1, 1000 * size) * (-1)
+        val = random.choice(CHARS)
         sample_list.add(idx, val)
         cur_node = sample_list.head
         while cur_node.next:
@@ -190,17 +187,23 @@ def test_add_8(capsys):
 
 # 空っぽでないlist
 # 1 < index <= size
-def test_add_9(capsys):
-    test_vals = ["A", "B", "C", "D"]
+def test_add_9():
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    middle_index = 3
-    sample_list.add(middle_index, "middle")
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> middle -> C -> D\n"
+    for _ in range(1000):
+        sample_list.add_last(random.choice(CHARS))
+    for _ in range(1000):
+        size = sample_list.count_node()
+        idx = random.randint(2, size)
+        val = random.choice(CHARS)
+        sample_list.add(idx, val)
+        cur_idx = 1
+        cur_node = sample_list.head
+        while cur_idx < idx:
+            cur_node = cur_node.next
+            cur_idx += 1
+        target_node = cur_node.next
+        assert idx == cur_idx
+        assert val == cur_node.val
 
 
 # =============================================
@@ -209,33 +212,32 @@ def test_add_9(capsys):
 
 # 空っぽのlist -> エラーを表示
 def test_remove_first_1():
-    sample_list = linked_list.LinkedList()
-    with pytest.raises(IndexError) as e:
-        sample_list.remove_first()
-    assert str(e.value) == "This is an empty linked list and no element to remove."
+    for _ in range(100):
+        sample_list = linked_list.LinkedList()
+        with pytest.raises(IndexError) as e:
+            sample_list.remove_first()
+        assert str(e.value) == "This is an empty linked list and no element to remove."
 
 
 # 空っぽでないときlistの先頭にnodeを削除可
 def test_remove_first_2(capsys):
-    test_vals = ["A", "B", "C", "D"]
-    sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    sample_list.remove_first()
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "B -> C -> D\n"
+    for _ in range(1000):
+        sample_list = linked_list.LinkedList()
+        for j in range(100):
+            sample_list.add_last(random.choice(CHARS))
+        assert sample_list.head.val == sample_list.remove_first()
 
 
 # 空っぽでないとき
 # node 1 個だけある
 # listの先頭にnodeを削除可
 def test_remove_first_3():
-    sample_list = linked_list.LinkedList()
-    sample_list.add_last("A")
-    sample_list.remove_first()
-    assert sample_list.head == None
+    for _ in range(1000):
+        sample_list = linked_list.LinkedList()
+        val = random.choice(CHARS)
+        sample_list.add_first(val)
+        assert sample_list.head.val == sample_list.remove_first()
+        assert sample_list.head == None
 
 
 # =============================================
@@ -244,33 +246,36 @@ def test_remove_first_3():
 
 # 空っぽのlist -> エラーを表示
 def test_remove_last_1():
-    sample_list = linked_list.LinkedList()
-    with pytest.raises(IndexError) as e:
-        sample_list.remove_last()
-    assert str(e.value) == "This is an empty linked list and no element to remove."
+    for _ in range(100):
+        sample_list = linked_list.LinkedList()
+        with pytest.raises(IndexError) as e:
+            sample_list.remove_last()
+        assert str(e.value) == "This is an empty linked list and no element to remove."
 
 
 # 空っぽでないとき
 # node 1 個だけある
 # listの先頭にnodeを削除することになる
 def test_remove_last_2():
-    sample_list = linked_list.LinkedList()
-    sample_list.add_last("A")
-    sample_list.remove_last()
-    assert sample_list.head == None
+    for _ in range(1000):
+        sample_list = linked_list.LinkedList()
+        val = random.choice(CHARS)
+        sample_list.add_first(val)
+        assert sample_list.head.val == sample_list.remove_last()
+        assert sample_list.head == None
 
 
 # 空っぽでないときlistの末尾のnodeを削除可
 def test_remove_last_3(capsys):
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
+    for _ in range(1000):
+        val = random.choice(CHARS)
         sample_list.add_last(val)
-
-    sample_list.remove_last()
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C\n"
+        cur_node = sample_list.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        assert val == sample_list.remove_last()
+        assert cur_node.next == None
 
 
 # =============================================
@@ -280,9 +285,10 @@ def test_remove_last_3(capsys):
 # listが空っぽのときは、エラーを表示する
 def test_remove_1():
     sample_list = linked_list.LinkedList()
-    for i in range(1000):
+    for _ in range(1000):
+        idx = random.randint(1, 1000)
         with pytest.raises(IndexError) as e:
-            sample_list.remove(i + 1)
+            sample_list.remove(idx)
         assert str(e.value) == "This is an empty linked list and no element to remove."
 
 
@@ -292,14 +298,11 @@ def test_remove_1():
 
 # index > size
 def test_remove_2():
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    size = len(test_vals)
     for i in range(1000):
-        idx = size + 1 + i
+        sample_list.add_last(random.choice(CHARS))
+        size = sample_list.count_node()
+        idx = random.randint(size + 1, 100 * size)
         with pytest.raises(IndexError) as e:
             sample_list.remove(idx)
         assert str(e.value) == "index out of range"
@@ -307,92 +310,93 @@ def test_remove_2():
 
 # index == 0
 def test_remove_3():
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
+    for _ in range(100):
+        sample_list.add_last(random.choice(CHARS))
 
-    with pytest.raises(IndexError) as e:
-        sample_list.remove(0)
-    assert str(e.value) == "invalid index number"
+    for _ in range(1000):
+        with pytest.raises(IndexError) as e:
+            sample_list.remove(0)
+        assert str(e.value) == "invalid index number"
 
 
 # index == 1 -> remove_first が実行される
 def test_remove_4(capsys):
-    test_vals = ["A", "B", "C", "D"]
     sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    sample_list.remove(1)
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "B -> C -> D\n"
+    for _ in range(1000):
+        sample_list.add_first(random.choice(CHARS))
+    for _ in range(1000):
+        val = random.choice(CHARS)
+        sample_list.add_first(val)
+        head_after_remove_first = sample_list.head.next
+        assert val == sample_list.remove(1)
+        assert head_after_remove_first == sample_list.head
 
 
 # index < 0 -> remove_last が実行される
-def test_remove_5(capsys):
+def test_remove_5():
     sample_list = linked_list.LinkedList()
-    for i in range(1000):
-        val = i + 1
-        sample_list.add_last(val)
+    for _ in range(1000):
+        sample_list.add_last(random.choice(CHARS))
 
-    for i in range(1000):
-        val = 1000 - i
-        idx = (i + 1) * (-1)
-        assert val == sample_list.remove(idx)
+    size = sample_list.count_node()
+
+    while size:
+        cur_node = sample_list.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        target = cur_node
+        idx = random.randint(1, 100 * size) * (-1)
+        assert target.val == sample_list.remove(idx)
+        assert target.next == None
+        size = sample_list.count_node()
 
 
 # index == size -> remove_last が実行される
 def test_remove_6():
     sample_list = linked_list.LinkedList()
-    for i in range(1000):
-        val = i + 1
-        sample_list.add_last(val)
+    for _ in range(1000):
+        sample_list.add_last(random.choice(CHARS))
 
     size = sample_list.count_node()
+
     while size:
-        val = size
-        assert val == sample_list.remove(size)
-        size -= 1
+        cur_node = sample_list.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        target = cur_node
+        assert target.val == sample_list.remove(size)
+        assert target.next == None
+        size = sample_list.count_node()
 
 
-# index < 0 -> remove_last が実行される
+# 1 < index < size の場合:
 def test_remove_7(capsys):
     sample_list = linked_list.LinkedList()
-    for i in range(1000):
-        val = i + 1
-        sample_list.add_last(val)
+    for _ in range(1000):
+        sample_list.add_last(random.choice(CHARS))
 
     size = sample_list.count_node()
-    while size:
-        val = size
-        idx = val * (-1)
-        assert val == sample_list.remove(idx)
-        size -= 1
-
-
-# 1 < index <= size の場合:
-def test_remove_8(capsys):
-    test_vals = ["A", "B", "middle", "C", "D"]
-    sample_list = linked_list.LinkedList()
-    for val in test_vals:
-        sample_list.add_last(val)
-
-    sample_list.remove(3)
-    sample_list.print_list()
-    captured = capsys.readouterr()
-    assert captured.out == "A -> B -> C -> D\n"
+    while size >= 3:
+        idx = random.randint(2, size - 1)
+        cur_node = sample_list.head
+        cur_idx = 1
+        while cur_idx < idx:
+            cur_node = cur_node.next
+            cur_idx += 1
+        target = cur_node
+        assert target.val == sample_list.remove(idx)
+        assert size - 1 == sample_list.count_node()
+        size = sample_list.count_node()
 
 
 # =============================================
 # LinkList count_node
 def test_count_node():
-    num_nodes = 1000
     sample_list = linked_list.LinkedList()
-    for val in range(num_nodes):
-        sample_list.add_last(val)
-        assert val + 1 == sample_list.count_node()
+    for i in range(1000):
+        sample_list.add_last(random.choice(CHARS))
+        assert i + 1 == sample_list.count_node()
 
 
 # =============================================
@@ -403,8 +407,8 @@ def test_print_list(capsys):
         sample_list = linked_list.LinkedList()
         num_nodes = n + 1
         for i in range(num_nodes):
-            val = i + 1
-            result_str += str(val) + " -> " if val < num_nodes else str(val) + "\n"
+            val = random.choice(CHARS)
+            result_str += val + "\n" if i == num_nodes - 1 else val + " -> "
             sample_list.add_last(val)
 
         sample_list.print_list()
