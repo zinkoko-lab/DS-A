@@ -1,16 +1,51 @@
 class Node:
+    """
+    A node in a singly linked list.
+
+    Attributes:
+        val: Any
+            The value stored in the node.
+        next: Node | None
+            Reference to the next node in the list.
+    """
 
     def __init__(self, val, next=None):
+        """
+        Initialize a new node.
+
+        Args:
+            val: any type
+                The data the node should store.
+            next: Node | None, optional
+                Reference to the next node in the list. Defaults to None.
+        """
         self.val = val
         self.next = next
 
 
 class LinkedList:
+    """
+    A singly linked list implementation that supports indexed insertion and removal.
+    Supports negative indexing for add/remove, treating negative index as 'append/remove last'.
+    """
 
     def __init__(self, head=None):
+        """
+        Initialize an empty linked list.
+
+        Args:
+            head: Node | None, optional
+                The initial head of the list. Defaults to None.
+        """
         self.head = head
 
     def count_node(self):
+        """
+        Count the number of nodes in the linked list.
+
+        Returns:
+            int: The number of nodes.
+        """
         count = 0
         cur = self.head
         while cur:
@@ -19,6 +54,10 @@ class LinkedList:
         return count
 
     def print_list(self):
+        """
+        Print all values in the list from head to tail.
+        Prints message if the list is empty.
+        """
         if not self.head:
             print("This is an empty linked-list.")
             return
@@ -28,71 +67,97 @@ class LinkedList:
             print(cur.val, end=" -> " if cur.next else "\n")
             cur = cur.next
 
-    #  listの任意の index の node を削除/追加するメソッドを実行する際に
-    # 与えられた index が有効であるかどうか check するプラベートメソッド
     def _validate_index(self, index, size, method):
-        # (listの長さ+1)より大きいindex番号を与ると、範囲外エラーとなる(add実行時)
+        """
+        Validate index for add/remove operations.
+
+        Args:
+            index (int): The index provided by user.
+            size (int): Current size of the list.
+            method (callable): The method that triggered validation (add/remove).
+
+        Raises:
+            IndexError: If index is out of valid range.
+        """
         if index > size + 1 and method == self.add:
             raise IndexError("index out of range")
-
-        # listの長さより大きいindex番号を与ると、範囲外エラーとなる(remove実行時)
         if index > size and method == self.remove:
             raise IndexError("index out of range")
-
-        # index-1 start 仕様だと考え、index番号を0と与えたときはエラーとなる
         if index == 0:
             raise IndexError("invalid index number")
 
-    # listの先頭に new node を加えるメソッド
     def add_first(self, val):
+        """
+        Insert a new node at the beginning of the list.
+
+        Args:
+            val: The value to insert.
+        """
         new = Node(val)
         new.next = self.head
         self.head = new
 
-    # 末尾に new node を加えるメソッド
     def add_last(self, val):
-        # 空っぽの list であれば、先頭に new node を加える
+        """
+        Insert a new node at the end of the list.
+
+        Args:
+            val: The value to insert.
+        """
         if not self.head:
             return self.add_first(val)
 
-        # 空っぽでないときは、先頭から一個一個たどって最後の nodeに辿り着くまで行く
         new = Node(val)
         cur = self.head
         while cur.next:
             cur = cur.next
         cur.next = new
 
-    # listの任意のindex に new node を加えるメソッド
     def add(self, index, val):
+        """
+        Insert a value at a specific index in the list.
 
+        Supported index rules:
+            - index == 1 → insert at head
+            - index == size + 1 → append to end
+            - index < 0 → treated as append to end
+            - 1 < index <= size → insert in middle
+
+        Args:
+            index (int): Target position to insert.
+            val: Value to insert.
+
+        Raises:
+            IndexError: If index is invalid.
+        """
         size = self.count_node()
-        self._validate_index(
-            index, size, self.add
-        )  # 与えられた index が有効であるかどうか check する
+        self._validate_index(index, size, self.add)
 
-        # 有効な範囲は (1 ~ size + 1) or (index < 0)となる
-        # index 番号が 1 の場合は listの先頭に new nodeを加える
         if index == 1:
             return self.add_first(val)
-
-        # index 番号がマイナスまたは size + 1の場合は末尾に new nodeを加える
         elif index < 0 or index == size + 1:
             return self.add_last(val)
 
-        # その他の場合(つまり 1 < index <= size)
-        else:
-            new = Node(val)
-            cur = self.head
-            cur_idx = 1
-            while cur_idx < index - 1:
-                cur = cur.next
-                cur_idx += 1
-            new.next = cur.next
-            cur.next = new
-            return
+        new = Node(val)
+        cur = self.head
+        cur_idx = 1
+        while cur_idx < index - 1:
+            cur = cur.next
+            cur_idx += 1
 
-    # listの先頭の node を削除するメソッド
+        new.next = cur.next
+        cur.next = new
+
     def remove_first(self):
+        """
+        Remove and return the first node of the list.
+
+        Returns:
+            any: The value of the removed node.
+
+        Raises:
+            IndexError: If the list is empty.
+        """
         if not self.head:
             raise IndexError("This is an empty linked list and no element to remove.")
 
@@ -101,74 +166,68 @@ class LinkedList:
         cur.next = None
         return cur.val
 
-    # listの最後の node を削除するメソッド
     def remove_last(self):
+        """
+        Remove and return the last node of the list.
+
+        Returns:
+            any: The value of the removed node.
+
+        Raises:
+            IndexError: If the list is empty.
+        """
         size = self.count_node()
 
-        # listが空っぽのときはエラ or listの中身は node 1個のみの場合は先頭を削除 => remove_first()へ
-        if not self.head or self.count_node() == 1:
+        if not self.head or size == 1:
             return self.remove_first()
-        elif size == 1:
-            target = self.head
-            self.head = None
-            return target.val  # stack のpopを再現するために追加した
-        else:
-            cur = self.head
-            count = 1
-            while count < size - 1:
-                cur = cur.next
-                count += 1
-            target = cur.next
-            cur.next = None
-            return target.val  # stack のpopを再現するために追加した
 
-    #  listの任意の index の node を削除するメソッド
+        cur = self.head
+        count = 1
+        while count < size - 1:
+            cur = cur.next
+            count += 1
+
+        target = cur.next
+        cur.next = None
+        return target.val
+
     def remove(self, index):
+        """
+        Remove and return the node at a specific index.
 
-        # listが空っぽのときは エラーを表示する
+        Supported index rules:
+            - index == 1 → remove first node
+            - index == size → remove last node
+            - index < 0 → remove last node
+            - 1 < index < size → remove middle node
+
+        Args:
+            index (int): Position to remove.
+
+        Returns:
+            any: Value of the removed node.
+
+        Raises:
+            IndexError: If index is invalid or list is empty.
+        """
         if not self.head:
             raise IndexError("This is an empty linked list and no element to remove.")
 
         size = self.count_node()
-        self._validate_index(
-            index, size, self.remove
-        )  # 与えられた index が有効であるかどうか check する
+        self._validate_index(index, size, self.remove)
 
-        # index の有効範囲は (1 ~ size) or (index < 0)
-
-        # index == 1の場合は、 先頭の nodeを削除するメソッドを実行
         if index == 1:
             return self.remove_first()
-
-        # index < 0 or index == size の場合は、最後の nodeを削除するメソッドを実行
         elif index == size or index < 0:
             return self.remove_last()
 
-        # 1 < index < size の場合:
-        else:
-            cur = self.head
-            count = 1
-            while count < index - 1:
-                cur = cur.next
-                count += 1
-            target = cur.next
-            cur.next = target.next
-            target.next = None
-            return target.val
+        cur = self.head
+        count = 1
+        while count < index - 1:
+            cur = cur.next
+            count += 1
 
-
-if __name__ == "__main__":
-    some_quote = LinkedList()
-    some_quote.add_first("if")
-    some_quote.add_last("there")
-    some_quote.add(3, "is")
-    some_quote.add(4, "no")
-    some_quote.add(5, "struggle")
-    some_quote.add(6, "there")
-    some_quote.add(7, "is")
-    some_quote.add(8, "no")
-    some_quote.add(9, "progress")
-    some_quote.print_list()
-    some_quote.remove(5)
-    some_quote.add(5, "apple")
-    some_quote.print_list()
+        target = cur.next
+        cur.next = target.next
+        target.next = None
+        return target.val

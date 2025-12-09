@@ -4,13 +4,13 @@ from linked_list import LinkedList
 class Stack(LinkedList):
 
     def push(self, val):
-        super().add_last(val)
+        return super().add_last(val)
 
     def pop(self):
         return super().remove_last()
 
     def get_val(self):
-        super().print_list()
+        return super().print_list()
 
     def peek(self):
         cur_node = self.head
