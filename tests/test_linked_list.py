@@ -3,7 +3,7 @@ import pytest
 import string
 import random
 
-CHARS = list(string.ascii_letters + string.digits)
+CHARS = string.ascii_letters + string.digits
 
 
 # =============================================
@@ -404,7 +404,18 @@ def test_count_node():
 
 # =============================================
 # LinkList print_list
-def test_print_list(capsys):
+
+
+# listが空っぽのとき
+def test_print_list_1(capsys):
+    empty_list = linked_list.LinkedList()
+    empty_list.print_list()
+    captured = capsys.readouterr()
+    assert captured.out == "This is an empty linked-list.\n"
+
+
+# 通常のlistのとき
+def test_print_list_2(capsys):
     for n in range(1000):
         result_str = ""
         sample_list = linked_list.LinkedList()
