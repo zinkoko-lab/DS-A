@@ -99,5 +99,13 @@ class OpenHash:
         p.set_stat(Status.DELETED)
         return True
 
-    # def dump(self) -> None:
-    #     pass
+    def dump(self) -> None:
+        """hash table を表示"""
+        for i in range(self.capacity):
+            print(f"{i:2}", end="")
+            if self.table[i].stat == Status.OCCUPIED:
+                print(f"{self.table[i].key} {self.table[i].value}")
+            elif self.table[i].stat == Status.EMPTY:
+                print("-- 未登録 --")
+            elif self.table[i].stat == Status.DELETED:
+                print("-- 削除済み --")
