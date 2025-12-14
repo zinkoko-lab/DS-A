@@ -61,13 +61,12 @@ class ChainedHash:
 
         # table[hash] が空っぽのとき
         if p is None:
-            print("A")
             print(f"There is no bucket with the key of {key}.")
             return False  # 削除失敗
 
         # 先頭の bucket にkeyを持っている要素があるとき
         if p.key == key:
-            print(f"{key}が table{[hash]}の 先頭にありました")
+            # print(f"{key}が table{[hash]}の 先頭にありました")
             self.table[hash] = p.next
             if p.next is not None:  # 先頭に bucketが一個だけあるかどうか確認する
                 p.next = None
@@ -82,19 +81,18 @@ class ChainedHash:
                 break
             p = p.next
         else:
-            print("C")
             print(f"There is no bucket with the key of {key}.")
             return False  # 同じkeyを持つ bucket が無かった。
 
         # 末尾に key を持つ bucket があるとき
         if target_bucket.next is None:
             p.next = None
-            print(f"{key}が table{[hash]}の 末尾にありました")
+            # print(f"{key}が table{[hash]}の 末尾にありました")
             return True
         else:
             p.next = target_bucket.next
             target_bucket.next = None
-            print(f"{key}が table{[hash]}の 中間の位置にありました")
+            # print(f"{key}が table{[hash]}の 中間の位置にありました")
             return True
 
     def dump(self) -> None:
