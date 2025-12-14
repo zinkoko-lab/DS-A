@@ -102,7 +102,7 @@ class ChainedHash:
             p = self.table[i]
             print(f"{i:02}", end="")
             while p is not None:
-                print(f" -> {p.key} {p.val if p.val is not None else ''}", end="")
+                print(f" -> {p.key} ({p.val if p.val is not None else ''})", end="")
                 p = p.next
             print()
 
